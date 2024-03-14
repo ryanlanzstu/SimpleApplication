@@ -35,6 +35,8 @@ pm2 stop example_app || true
 
 # Install dependencies
 npm install
+echo $PRIVATE_KEY > privatekey.pem
+echo $SERVER > server.crt
 
 # Start the app using PM2
 pm2 start ./bin/www --name example_app
