@@ -1,15 +1,35 @@
 #!/usr/bin/env bash
-# Look for updates of available software packages && install nodejs and npm
-sudo apt update && sudo apt install nodejs npm
-# Install pm2 which is a production process manager for Node.js with a built-in load balancer.
-sudo npm install -g pm2
-# Stop the application with the process name 'simple_app' running currently
-pm2 stop simple_app
-# Change directory into folder where application is downloaded
-cd SimpleApplication/
-# Install dependencies into the application
+sudo apt update && sudo apt install -y nodejs npm
+
+# Install nvm to manage Node.js versions
+wget -qO- https://raw.githubusercontent.com/nvm-sh/nvm/v0.39.1/install.sh | bash
+export NVM_DIR="$HOME/.nvm"
+[ -s "$NVM_DIR/nvm.sh" ] && \. "$NVM_DIR/nvm.sh"  # This loads nvm
+[ -s "$NVM_DIR/bash_completion" ] && \. "$NVM_DIR/bash_completion"  # This loads nvm bash_completion
+
+# Use nvm to install and use the correct version of Node.js
+nvm install 18.17.0
+nvm use 18.17.0
+
+# Ensure npm is up to date
+npm install -g npm@latest
+
+# Prepare the application
+if [ -d "SimpleApplication" ]; then
+    rm -rf SimpleApplication
+fi
+git clone https://github.com/ryanlanzstu/SimpleApplication.git
+cd SimpleApplication || exit
+
+# Stop any previously running instance of the app
+pm2 stop example_app || true
+
+# Install dependencies
 npm install
-echo $PRIVATE_KEY > privatekey.pem
-echo $SERVER > server.crt
-# Start the application with the process name 'simple_app' using pm2
-pm2 start ./bin/www --name simple_app
+
+# Handle private key and certificate for HTTPS
+echo "$PRIVATE_KEY" > privatekey.pem
+echo "$SERVER" > server.crt
+
+# Start the application with PM2
+pm2 start ./bin/www --name example_app

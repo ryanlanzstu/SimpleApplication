@@ -21,7 +21,7 @@ jobs:
   build:
     working_directory: ~/SimpleApplication
     docker:
-      - image: circleci/node:14.17.0
+      - image: circleci/node:18.17.0
     steps:
       - checkout
       - restore_cache:
@@ -39,7 +39,7 @@ jobs:
 
   deploy:
     docker:
-      - image: circleci/node:14.17.0
+      - image: circleci/node:18.17.0
     steps:
       - run:
           name: deploy-application
