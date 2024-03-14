@@ -23,7 +23,7 @@ npm install -g npm@latest
 if [ -d "SimpleApplication" ]; then
     rm -rf SimpleApplication
 fi
-
+#
 # Clone the repository
 git clone https://github.com/ryanlanzstu/SimpleApplication.git
 
