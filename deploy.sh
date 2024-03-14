@@ -1,42 +1,15 @@
-# Referenced: https://stackoverflow.com/questions/61625191/nvm-in-gitlab-ci-script-and-ssh
-
-
 #!/usr/bin/env bash
-sudo apt update
-
-# Install nvm
-wget -qO- https://raw.githubusercontent.com/nvm-sh/nvm/v0.39.1/install.sh | bash
-
-# Source for nvm
-export NVM_DIR="$HOME/.nvm"
-[ -s "$NVM_DIR/nvm.sh" ] && \. "$NVM_DIR/nvm.sh"
-[ -s "$NVM_DIR/bash_completion" ] && \. "$NVM_DIR/bash_completion"
-
-# Install node and npm
-nvm install 18.17.0
-nvm use 18.17.0
-
-# Check npm is compatible
-npm install -g npm@latest
-
-# Remove ExampleApplication
-if [ -d "SimpleApplication" ]; then
-    rm -rf SimpleApplication
-fi
-#
-# Clone the repository
-git clone https://github.com/ryanlanzstu/SimpleApplication.git
-
-# Change directory to the cloned repository
-cd SimpleApplication || exit
-
-# Stop any previously running instance of the app
-pm2 stop example_app || true
-
-# Install dependencies
+# Look for updates of available software packages && install nodejs and npm
+sudo apt update && sudo apt install nodejs npm
+# Install pm2 which is a production process manager for Node.js with a built-in load balancer.
+sudo npm install -g pm2
+# Stop the application with the process name 'simple_app' running currently
+pm2 stop simple_app
+# Change directory into folder where application is downloaded
+cd SimpleApplication/
+# Install dependencies into the application
 npm install
 echo $PRIVATE_KEY > privatekey.pem
 echo $SERVER > server.crt
-
-# Start the app using PM2
-pm2 start ./bin/www --name example_app
+# Start the application with the process name 'simple_app' using pm2
+pm2 start ./bin/www --name simple_app
