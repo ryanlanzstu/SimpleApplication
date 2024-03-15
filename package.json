@@ -16,7 +16,7 @@
     "morgan": "~1.9.1"
   },
   "devDependencies": {
-    "mocha": "^10.3.0",
+    "mocha": "8.0.0",
     "mocha-circleci-reporter": "^0.0.3",
     "nodemon": "^2.0.7"
   }
